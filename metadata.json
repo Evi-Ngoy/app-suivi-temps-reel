@@ -1,0 +1,7 @@
+{
+  "name": "EntrepreTrack AI",
+  "description": "Une application de gestion d'entreprise en temps réel pour entrepreneurs, intégrant un tableau de bord analytique et un assistant IA intelligent.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
