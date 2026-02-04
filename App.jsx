@@ -8,6 +8,7 @@ import { db } from './services/db.js';
 import { getBusinessInsights } from './services/geminiService.js';
 
 const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sales, setSales] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -16,6 +17,11 @@ const App = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const scrollRef = useRef(null);
+
+  const navigateTo = (tab) => {
+    setActiveTab(tab);
+    setIsMenuOpen(false);
+  };
 
   // Modal states
   const [showSaleModal, setShowSaleModal] = useState(false);
@@ -89,21 +95,37 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
+     />
       
       <main className="flex-1 md:ml-64 p-4 md:p-8">
         <header className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-              {activeTab === 'dashboard' && 'Vue d\'ensemble'}
-              {activeTab === 'sales' && 'Journal des Ventes'}
-              {activeTab === 'inventory' && 'Gestion du Stock'}
-              {activeTab === 'ai' && 'Assistant Stratégique AI'}
-              {isSyncing && <i className="fas fa-sync-alt animate-spin text-sm text-indigo-400"></i>}
-            </h2>
-            <p className="text-slate-500">
-              {isSyncing ? 'Synchronisation en cours...' : 'Connecté en temps réel'} • {new Date().toLocaleDateString('fr-FR')}
-            </p>
+<div className="flex items-center gap-4">
+            {/* BOUTON BURGER : Visible uniquement sur mobile */}
+            <button 
+              onClick={() => setIsMenuOpen(true)}
+              className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <i className="fas fa-bars text-xl"></i>
+            </button>
+
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 flex items-center gap-3">
+                {activeTab === 'dashboard' && 'Vue d\'ensemble'}
+                {activeTab === 'sales' && 'Ventes'}
+                {activeTab === 'inventory' && 'Stocks'}
+                {activeTab === 'ai' && 'Conseiller IA'}
+                {isSyncing && <i className="fas fa-sync-alt animate-spin text-sm text-indigo-400"></i>}
+              </h2>
+              {/* On cache le sous-titre sur petit mobile pour gagner de la place */}
+              <p className="hidden sm:block text-slate-500 text-sm">
+                Connecté en temps réel • {new Date().toLocaleDateString('fr-FR')}
+              </p>
+            </div>
           </div>
           <div className="flex gap-3">
             <button 
